@@ -2,11 +2,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-
     <groupId>com.github.ifrugal</groupId>
     <artifactId>ifrugal-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.2-SNAPSHOT</version>
+
+    <name>iFrugal-parent</name>
+    <description>iFrugal-parent</description>
+    <url>https://github.com/iFrugal/iFrugal-parent</url>
+
+    <organization>
+        <url>https://github.com/iFrugal</url>
+        <name>iFrugal</name>
+    </organization>
+    <inceptionYear>2020</inceptionYear>
+
+
+    <developers>
+        <developer>
+            <name>Abhijeet Rai</name>
+            <email>abhijeet.techrepo@gmail.com</email>
+            <organization>iFrugal</organization>
+            <organizationUrl>https://github.com/iFrugal</organizationUrl>
+            <timezone>UTC+05:30</timezone>
+        </developer>
+    </developers>
 
     <properties>
         <jdk.version>1.8</jdk.version>
