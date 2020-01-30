@@ -6,7 +6,7 @@
     <groupId>com.github.ifrugal</groupId>
     <artifactId>ifrugal-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <properties>
         <jdk.version>1.8</jdk.version>
@@ -212,7 +212,7 @@
         <connection>scm:git:git@github.com:iFrugal/iFrugal-parent.git</connection>
         <developerConnection>scm:git:git@github.com:iFrugal/iFrugal-parent.git</developerConnection>
         <url>scm:git:git@github.com:iFrugal/iFrugal-parent.git</url>
-        <tag>ifrugal-parent-1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
 
