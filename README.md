@@ -1,3 +1,4 @@
 # iFrugal-prarent
 
-![Maven Central](https://img.shields.io/maven-central/v/iFrugal/iFrugal-parent?style=for-the-badge)
+
+![Maven Central](https://img.shields.io/maven-central/v/com.github.ifrugal/ifrugal-parent?style=for-the-badge)
