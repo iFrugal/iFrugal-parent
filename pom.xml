@@ -165,7 +165,7 @@
                     <localCheckout>true</localCheckout>
                     <pushChanges>false</pushChanges>
                     <mavenExecutorId>forked-path</mavenExecutorId>
-                    <arguments>-Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}</arguments>
+                    <arguments>-Dgpg.passphrase=${MAVEN_GPG_PASSPHRASE}</arguments>
                 </configuration>
                 <dependencies>
                     <dependency>
