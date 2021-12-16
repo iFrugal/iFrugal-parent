@@ -1,7 +1,7 @@
 name: release and push to central
 on:
   push:
-    branches: [ master ]
+    tags: [ '*' ]
   pull_request:
     branches: [ master ]
 
