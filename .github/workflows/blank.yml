@@ -35,5 +35,7 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           echo "PWD=$PWD"
+          git config --global user.email "abhijeet.techrepo@gmail.com"
+          git config --global user.name "abhijeet.techrepo"
           sh scripts/buildLocally.sh 
 
