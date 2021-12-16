@@ -1,7 +1,7 @@
 name: release and push to central
 on:
   push:
-    tags: [ '*' ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -21,18 +21,24 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: build artifact
         run: mvn clean package
-      - name: Create release
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          artifacts: "${{ github.workspace }}/target/*.jar"
-          token: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Create release
+      #  uses: ncipollo/release-action@v1
+      #  with:
+      #    allowUpdates: true
+      #     artifacts: "${{ github.workspace }}/target/*.jar"
+      #    token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configure Git user
+        run: |
+          git config user.email "abhijeet.techrepo@gmail.com"
+          git config user.name "abhijeet.techrepo"
+
       - name: Publish to the Maven Central Repository
         run: |
           mvn \
             --no-transfer-progress \
             --batch-mode \
-            deploy
+            release:prepare \
+            release:perform
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
