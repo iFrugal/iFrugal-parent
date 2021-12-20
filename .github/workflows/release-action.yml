@@ -26,9 +26,17 @@ jobs:
           git config user.email "abhijeet.techrepo@gmail.com"
           git config user.name "abhijeet.techrepo"
 
-      - name: Publish to the Maven Central Repository
+      - name: release:prepare 
         run: |
-          mvn --batch-mode release:prepare release:perform
+          mvn --batch-mode release:prepare
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: release:perform 
+        run: |
+          mvn --batch-mode release:perform
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
