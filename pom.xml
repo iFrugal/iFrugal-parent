@@ -5,7 +5,7 @@
     <groupId>com.github.ifrugal</groupId>
     <artifactId>ifrugal-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.8-SNAPSHOT</version>
+    <version>1.0.8</version>
 
     <name>iFrugal-parent</name>
     <description>iFrugal-parent</description>
@@ -251,7 +251,7 @@
         <connection>scm:git:git@github.com:iFrugal/iFrugal-parent.git</connection>
         <developerConnection>scm:git:git@github.com:iFrugal/iFrugal-parent.git</developerConnection>
         <url>scm:git:git@github.com:iFrugal/iFrugal-parent.git</url>
-        <tag>HEAD</tag>
+        <tag>ifrugal-parent-1.0.8</tag>
     </scm>
 </project>
 
