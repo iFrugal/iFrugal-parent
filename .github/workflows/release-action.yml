@@ -25,7 +25,7 @@ jobs:
         run: |
           git config user.email "abhijeet.techrepo@gmail.com"
           git config user.name "abhijeet.techrepo"
-      - name: release: prepare and perform 
+      - name: release:prepare_and_perform 
         run: |
           mvn -e -V -B -fae -Darguments="-Dmaven.test.skip=true" -DscmCommentPrefix="[maven-release-plugin] [skip-ci] " -DtagNameFormat="@{project.version}" build-helper:parse-version release:clean release:prepare -DdevelopmentVersion='$'{parsedVersion.majorVersion}.'$'{parsedVersion.nextMinorVersion}.1-SNAPSHOT release:perform
           #mvn --batch-mode release:perform
