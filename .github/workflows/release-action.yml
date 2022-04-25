@@ -34,7 +34,7 @@ jobs:
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Push Tags 
-        run: | 
-          git push --tags
-          git push origin master
+      #- name: Push Tags 
+      #  run: | 
+      #    git push --tags
+      #    git push origin master
