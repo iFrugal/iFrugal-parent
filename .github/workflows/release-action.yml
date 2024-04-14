@@ -37,11 +37,15 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Create settings.xml file
         run: echo "$MAVEN_SETTINGS_XML" > ~/.m2/settings.xml
+        env:
+          MAVEN_SETTINGS_XML: ${{ secrets.MAVEN_SETTINGS_XML }}
       - name: Debug VAR_MAVEN_SETTINGS_XML
         run: |
           echo "VAR_MAVEN_SETTINGS_XML: $VAR_MAVEN_SETTINGS_XML"
           echo "Contents of VAR_MAVEN_SETTINGS_XML:"
           echo "$VAR_MAVEN_SETTINGS_XML" | head -n 10  # Print the first few lines of the XML content
+        env:
+          MAVEN_SETTINGS_XML: ${{ variables.VAR_MAVEN_SETTINGS_XML }}
       - name: Debug MAVEN_SETTINGS_XML
         run: |
           echo "MAVEN_SETTINGS_XML: $MAVEN_SETTINGS_XML"
