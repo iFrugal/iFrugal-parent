@@ -28,7 +28,8 @@
     </developers>
 
     <properties> <!-- Updated with latest versions on 14th April, 2024 -->
-        <jdk.version>1.8</jdk.version>
+        <jdk.version>21</jdk.version>
+        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.organization>ifrugal</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
