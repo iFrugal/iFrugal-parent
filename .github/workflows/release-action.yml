@@ -37,10 +37,17 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Create settings.xml file
         run: echo "$MAVEN_SETTINGS_XML" > ~/.m2/settings.xml
-      - name: Debug settings.xml content from secret
-        run: echo "$MAVEN_SETTINGS_XML"
-      - name: Debug settings.xml content from secret
-        run: echo "$MAVEN_SETTINGS_XML"
+      - name: Debug VAR_MAVEN_SETTINGS_XML
+        run: |
+          echo "VAR_MAVEN_SETTINGS_XML: $VAR_MAVEN_SETTINGS_XML"
+          echo "Contents of VAR_MAVEN_SETTINGS_XML:"
+          echo "$VAR_MAVEN_SETTINGS_XML" | head -n 10  # Print the first few lines of the XML content
+      - name: Debug MAVEN_SETTINGS_XML
+        run: |
+          echo "MAVEN_SETTINGS_XML: $MAVEN_SETTINGS_XML"
+          echo "Contents of MAVEN_SETTINGS_XML:"
+          echo "$MAVEN_SETTINGS_XML" | head -n 10  # Print the first few lines of the XML content
+
       - name: Debug settings.xml content from file
         run: cat ~/.m2/settings.xml
       - name: Build and analyze with Sonar
