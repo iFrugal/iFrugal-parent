@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  publish:
+  setup-jdk:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,6 +23,9 @@ jobs:
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -41,13 +44,16 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
 
+  release_publish:
+    runs-on: ubuntu-latest
+    steps:
       - name: Configure Git user
         run: |
           git config user.email "abhijeet.techrepo@gmail.com"
           git config user.name "abhijeet.techrepo"
           git pull origin master
           cat ~/.m2/settings.xml
-      - name: release:prepare_and_perform 
+      - name: release:prepare_and_perform
         run: |
           mvn -Darguments="-Dmaven.test.skip=true" -DscmCommentPrefix="[maven-release-plugin] [skip-ci] " -DtagNameFormat="@{project.version}" build-helper:parse-version release:clean release:prepare -DdevelopmentVersion='$'{parsedVersion.majorVersion}.'$'{parsedVersion.nextMinorVersion}.1-SNAPSHOT release:perform
           #mvn --batch-mode release:perform
@@ -56,7 +62,8 @@ jobs:
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #- name: Push Tags 
-      #  run: | 
+      #- name: Push Tags
+      #  run: |
       #    git push --tags
       #    git push origin master
+
