@@ -10,12 +10,6 @@ jobs:
     name: Build and analyze
     runs-on: ubuntu-latest
     steps:
-      - name: Import GPG secret key
-        run: |
-          gpg --import /path/to/decrypted/secret.key
-      - name: Set default GPG key
-        run: |
-          gpg --batch --passphrase ${GPG_PASSPHRASE} --pinentry-mode loopback --import-secret-keys /path/to/decrypted/secret.key
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
