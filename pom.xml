@@ -4,7 +4,8 @@
     <groupId>com.github.ifrugal</groupId>
     <artifactId>ifrugal-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.9-SNAPSHOT</version>
+    <version>1.0.10-SNAPSHOT</version>
+
 
     <name>iFrugal-parent</name>
     <description>iFrugal-parent</description>
