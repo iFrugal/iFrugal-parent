@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.ifrugal</groupId>
     <artifactId>ifrugal-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.13-SNAPSHOT</version>
 
-
     <name>iFrugal-parent</name>
     <description>iFrugal-parent</description>
     <url>https://github.com/iFrugal/iFrugal-parent</url>
 
     <organization>
-        <url>https://github.com/iFrugal</url>
         <name>iFrugal</name>
+        <url>https://github.com/iFrugal</url>
     </organization>
-    <inceptionYear>2020</inceptionYear>
 
+    <inceptionYear>2020</inceptionYear>
 
     <developers>
         <developer>
@@ -28,17 +30,27 @@
         </developer>
     </developers>
 
-    <properties> <!-- Updated with latest versions on 14th April, 2024 -->
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:iFrugal/iFrugal-parent.git</connection>
+        <developerConnection>scm:git:git@github.com:iFrugal/iFrugal-parent.git</developerConnection>
+        <url>https://github.com/iFrugal/iFrugal-parent</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <properties>
         <jdk.version>21</jdk.version>
-        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sonar.organization>ifrugal</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.projectKey>iFrugal_iFrugal-parent</sonar.projectKey>
         <lombok.version>1.18.32</lombok.version>
-        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <slf4j-api.version>2.0.13</slf4j-api.version>
         <testng.version>7.10.1</testng.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
@@ -47,7 +59,6 @@
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
         <maven-scm-provider-gitexe.version>2.0.1</maven-scm-provider-gitexe.version>
-        <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
         <maven-gpg-plugin.version>3.2.3</maven-gpg-plugin.version>
     </properties>
 
@@ -85,6 +96,7 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
@@ -92,42 +104,23 @@
                     <target>${jdk.version}</target>
                 </configuration>
             </plugin>
-            <!--<plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <header>header.txt</header>
-                    <excludes>
-                        <exclude>LICENSE.txt</exclude>
-                        <exclude>*.xml</exclude>
-                        <exclude>*.properties</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <forkCount>3</forkCount>
-                    <argLine>${argLine} -Xmx512m</argLine>
+                    <argLine>-Xmx512m</argLine>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>${maven-jar-plugin.version}</version>
             </plugin>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${maven-javadoc-plugin.version}</version>
-                <configuration>
-                    &lt;!&ndash; https://bugs.openjdk.java.net/browse/JDK-8212233 &ndash;&gt;
-                    <source>8</source>
-                </configuration>
-            </plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -145,18 +138,42 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>${maven-deploy-plugin.version}</version>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>default-deploy</id>
-                        <phase>deploy</phase>
+                        <id>attach-source</id>
                         <goals>
-                            <goal>deploy</goal>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
+                <configuration>
+                    <localCheckout>true</localCheckout>
+                    <pushChanges>false</pushChanges>
+                    <mavenExecutorId>forked-path</mavenExecutorId>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>${maven-scm-provider-gitexe.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -176,78 +193,15 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${maven-source-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>attach-source</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>${maven-release-plugin.version}</version>
-                <configuration>
-                    <localCheckout>true</localCheckout>
-                    <pushChanges>false</pushChanges>
-                    <mavenExecutorId>forked-path</mavenExecutorId>
-                    <arguments>-Dgpg.passphrase=${MAVEN_GPG_PASSPHRASE}</arguments>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.scm</groupId>
-                        <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>${maven-scm-provider-gitexe.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        
-
-            <!-- As per https://theoverengineered.blog/posts/publishing-my-first-artifact-to-maven-central-using-github-actions-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>${maven-gpg-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
 
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-
     <profiles>
-        <!-- GPG Signature on release -->
         <profile>
-            <id>release-sign-artifacts</id>
+            <id>release</id>
             <activation>
                 <property>
-                    <name>performRelease</name>
+                    <name>release</name>
                     <value>true</value>
                 </property>
             </activation>
@@ -277,11 +231,5 @@
             </build>
         </profile>
     </profiles>
-    <scm>
-        <connection>scm:git:git@github.com:iFrugal/iFrugal-parent.git</connection>
-        <developerConnection>scm:git:git@github.com:iFrugal/iFrugal-parent.git</developerConnection>
-        <url>scm:git:git@github.com:iFrugal/iFrugal-parent.git</url>
-        <tag>HEAD</tag>
-    </scm>
-</project>
 
+</project>
