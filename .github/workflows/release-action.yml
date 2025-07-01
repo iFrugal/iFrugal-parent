@@ -1,81 +1,52 @@
-name: release and push to central
-
+name: Release to Maven Central
 
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
-  publish:
+  deploy:
     runs-on: ubuntu-latest
+
+    env:
+      CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+      CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Set up Java for publishing to Maven Central Repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: 21
           distribution: 'corretto'
-          server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-          gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Create settings.xml file
-        run: echo "$MAVEN_SETTINGS_XML" > ~/.m2/settings.xml
-        env:
-          MAVEN_SETTINGS_XML: ${{ secrets.MAVEN_SETTINGS_XML }}
-      - name: Debug MAVEN_SETTINGS_XML
-        run: |
-          echo "MAVEN_SETTINGS_XML: $MAVEN_SETTINGS_XML"
-          echo "Contents of MAVEN_SETTINGS_XML:"
-          echo "$MAVEN_SETTINGS_XML" | head -n 10  # Print the first few lines of the XML content
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MAVEN_SETTINGS_XML: ${{ secrets.MAVEN_SETTINGS_XML }}
+          java-version: 21
 
-      - name: Debug settings.xml content from file
-        run: cat ~/.m2/settings.xml
-      - name: Build and analyze with Sonar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+      - name: Create Maven settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml <<EOF
+          <settings>
+            <servers>
+              <server>
+                <id>central</id>
+                <username>${CENTRAL_USERNAME}</username>
+                <password>${CENTRAL_TOKEN}</password>
+              </server>
+              <server>
+                <id>gpg.passphrase</id>
+                <passphrase>${GPG_PASSPHRASE}</passphrase>
+              </server>
+            </servers>
+          </settings>
+          EOF
 
-      - name: Configure Git user
+      - name: Import GPG key
         run: |
-          git config user.email "abhijeet.techrepo@gmail.com"
-          git config user.name "abhijeet.techrepo"
-          git pull origin master
-          cat ~/.m2/settings.xml
-      - name: release:prepare_and_perform
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --batch --import
+          gpg --list-keys
+
+      - name: Deploy to Maven Central
         run: |
-          mvn -s ~/.m2/settings.xml -Darguments="-Dmaven.test.skip=true" -DscmCommentPrefix="[maven-release-plugin] [skip-ci] " -DtagNameFormat="@{project.version}" build-helper:parse-version release:clean release:prepare -DdevelopmentVersion='$'{parsedVersion.majorVersion}.'$'{parsedVersion.nextMinorVersion}.1-SNAPSHOT release:perform
-          #mvn --batch-mode release:perform
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #- name: Push Tags
-      #  run: |
-      #    git push --tags
-      #    git push origin master
+          mvn -B clean deploy -Prelease-sign-artifacts -Dgpg.passphrase="${GPG_PASSPHRASE}" -DskipTests=true -s ~/.m2/settings.xml
