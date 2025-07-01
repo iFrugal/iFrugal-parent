@@ -26,12 +26,12 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:iFrugal/iFrugal-parent.git</connection>
-    <developerConnection>scm:git:git@github.com:iFrugal/iFrugal-parent.git</developerConnection>
-    <url>https://github.com/iFrugal/iFrugal-parent</url>
-    <tag>HEAD</tag>
+     <connection>scm:git:https://x-access-token:${env.GITHUB_TOKEN}@github.com/iFrugal/iFrugal-parent.git</connection>
+     <developerConnection>scm:git:https://x-access-token:${env.GITHUB_TOKEN}@github.com/iFrugal/iFrugal-parent.git</developerConnection>
+     <url>https://github.com/iFrugal/iFrugal-parent</url>
+     <tag>HEAD</tag>
   </scm>
-
+         
   <developers>
     <developer>
       <name>Abhijeet Rai</name>
