@@ -1,8 +1,9 @@
-name: Release to Maven Central
+name: Build and Deploy to Maven Central
 
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:  # 🔹 This enables manual trigger
 
 jobs:
   deploy:
@@ -14,7 +15,7 @@ jobs:
       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Set up Java
@@ -42,11 +43,24 @@ jobs:
           </settings>
           EOF
 
-      - name: Import GPG key
+      - name: Extract Project Version
+        id: version
+        run: |
+          version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: Import GPG Key (only for releases)
+        if: "!endsWith(steps.version.outputs.version, '-SNAPSHOT')"
         run: |
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --batch --import
-          gpg --list-keys
+          gpg --list-secret-keys
 
       - name: Deploy to Maven Central
         run: |
-          mvn -B clean deploy -Prelease-sign-artifacts -Dgpg.passphrase="${GPG_PASSPHRASE}" -DskipTests=true -s ~/.m2/settings.xml
+          if [[ "${{ steps.version.outputs.version }}" == *-SNAPSHOT ]]; then
+            echo "Deploying SNAPSHOT version"
+            mvn -B clean deploy -DskipTests -s ~/.m2/settings.xml
+          else
+            echo "Deploying RELEASE version"
+            mvn -B clean deploy -DskipTests -Prelease -Dgpg.passphrase="${GPG_PASSPHRASE}" -s ~/.m2/settings.xml
+          fi
